@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
+		<PackageType>MSBuildSdk</PackageType>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+	</PropertyGroup>
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Folder Include="Sdk\" />
+	</ItemGroup>
+</Project>

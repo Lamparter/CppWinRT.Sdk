@@ -1,0 +1,112 @@
+<!-- The C++/WinRT MSBuild SDK -->
+<Project>
+	<Import Project="$(_CppWinRTProps)" Condition="Exists(_CppWinRTProps)" />
+	<PropertyGroup>
+		<Keyword>Win32Proj</Keyword>
+		<MinimalCoreWin>true</MinimalCoreWin>
+
+		<!-- NuGet packages directory -->
+		<PackagesDir>$(SolutionDir)\packages</PackagesDir>
+		
+		<!-- C++/WinRT fixed version -->
+		<CppWinRTVersion>2.0.220531.1</CppWinRTVersion>
+		
+		<!-- Relative C++/WinRT properties directory -->
+		<_CppWinRTProps>$(PackagesDir)\Microsoft.Windows.CppWinRT.$(CppWinRTVersion)\build\native\Microsoft.Windows.CppWinRT.props</_CppWinRTProps>
+	</PropertyGroup>
+	
+	<!-- Calculate root namespace -->
+	<PropertyGroup Label="RootNamespace">
+		<_ProjectNameNoSpaces>$(MSBuildProjectName.Replace(" ", "_"))</_ProjectNameNoSpaces>
+		<_ProjectNameNoSpacesNoPeriods>$(_ProjectNameNoSpaces.Replace(".", "_"))</_ProjectNameNoSpacesNoPeriods>
+		<RootNamespace>$(_ProjectNameNoSpacesNoPeriods)</RootNamespace>
+	</PropertyGroup>
+
+	<!-- Project target platforms -->
+	<PropertyGroup Label="TargetPlatform">
+		<!-- Defaults -->
+		<WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+		<WindowsTargetPlatformMinVersion>10.0.17134.0</WindowsTargetPlatformMinVersion>
+	</PropertyGroup>
+	
+	<!-- Configuration -->
+	<PropertyGroup Label="Configuration">
+		<!-- Build type -->
+		<ConfigurationType>Application</ConfigurationType>
+		
+		<!-- C++ SDK version -->
+		<PlatformToolset>v143</PlatformToolset>
+		<PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
+		<PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
+		<PlatformToolset Condition="'$(VisualStudioVersion)' == '14.0'">v140</PlatformToolset>
+		
+		<!-- Character set -->
+		<CharacterSet>Unicode</CharacterSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'" Label="DebugConfiguration">
+		<!-- Debug properties -->
+		<UseDebugLibraries>true</UseDebugLibraries>
+		<LinkIncremental>true</LinkIncremental>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'" Label="ReleaseConfiguration">
+		<!-- Release properties -->
+		<UseDebugLibraries>false</UseDebugLibraries>
+		<LinkIncremental>false</LinkIncremental>
+		<WholeProgramOptimization>true</WholeProgramOptimization>
+	</PropertyGroup>
+	
+	<!-- C++/WinRT defaults -->
+	<PropertyGroup Label="CppWinRTDefaults">
+		<CppWinRTOptimized>true</CppWinRTOptimized>
+		<CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
+		<CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
+	</PropertyGroup>
+	
+	<!-- Microsoft Visual C++ -->
+	<ImportGroup Label="MSVC">
+		<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+		<!--<Import Project="$(MSBuildProjectDirectory)\PropertySheet.props" Label="PropertySheets" />-->
+	</ImportGroup>
+	
+	<!-- <ClCompile/> <Link/> -->
+	<ItemDefinitionGroup>
+		<ClCompile>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+			<PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+			<PreprocessorDefinitions>_CONSOLE;WIN32_LEAN_AND_MEAN;WINRT_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<WarningLevel>Level4</WarningLevel>
+			<AdditionalOptions>%(AdditionalOptions) /permissive- /bigobj</AdditionalOptions>
+		</ClCompile>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)' == 'Debug'">
+		<ClCompile>
+			<Optimization>Disabled</Optimization>
+			<PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+		</Link>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Platform)' == 'Win32'">
+		<ClCompile>
+			<PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+		</ClCompile>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
+		<ClCompile>
+			<Optimization>MaxSpeed</Optimization>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<IntrinsicFunctions>true</IntrinsicFunctions>
+			<PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<OptimizeReferences>true</OptimizeReferences>
+			<GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+		</Link>
+	</ItemDefinitionGroup>
+</Project>
