@@ -5,6 +5,8 @@
 		<Keyword>Win32Proj</Keyword>
 		<MinimalCoreWin>true</MinimalCoreWin>
 
+		<BaseOutputPath>bin\</BaseOutputPath>
+
 		<!-- NuGet packages directory -->
 		<PackagesDir>$(SolutionDir)\packages</PackagesDir>
 		
